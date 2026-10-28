@@ -1,36 +1,31 @@
-# Walkthrough: Antigravity-ClaudeCode Orchestrator Conceptualisation
+# Walkthrough: concept review of 2026-10-28
 
-We have successfully established the foundational design, theoretical grounding, engine comparative analysis, and user-facing documentation for the **Antigravity-ClaudeCode Orchestrator**.
+## Timeline
 
----
+- **2026-10-26:** the first conceptualisation and README proposed an MCP bridge that would let Claude Code use Antigravity (`agy`) as a peer (commit `b97a64e`).
+- **2026-10-28:** the review checked every claim against official documentation, earlier projects and a local installation (Windows 11, `agy` 1.4.9, Claude Code 2.1.310).
 
-## Deliverables in Repository
+## Findings
 
-| Deliverable | Location | Description |
-| :--- | :--- | :--- |
-| **Project Conceptualisation** | [conceptualisation.md](conceptualisation.md) | Comprehensive technical design document covering the theoretical foundation, engine architecture comparisons, main vs. subagent model routing, and autonomous collaboration heuristics. |
-| **User-Facing Documentation** | [README.md](README.md) | High-level developer documentation outlining motivation, complementary superpowers, comparison with prior community plugins, MCP tool specifications, and setup instructions. |
-| **Walkthrough** | [walkthrough.md](walkthrough.md) | Permanent walkthrough record summarizing key conceptual pillars and decisions. |
+- **Feasible.** `agy` has a documented headless mode with JSON output, and `agy models` worked when run from Claude Code's Bash tool on the test machine. Whether `agy -p` hangs on native Windows is still untested.
+- **Not beneficial as designed.**
+  - Claude Code now has a 1M-token context by default, the same size as Gemini 3.8 Flash, so there is no context gap.
+  - The test account offers no Gemini Pro model.
+  - Measured delegation saved money only on large tasks.
+  - The design's claimed advantages over the yuting0624 plugin were mistaken.
+- **Worth pairing in three cases, with Claude Code as the lead:**
+  - a second opinion on high-stakes diffs;
+  - large, self-contained tasks with tests when Claude's limits get in the way;
+  - audio, video and Google Cloud work.
 
----
+  The yuting0624 plugin already covers these on macOS, Linux and WSL.
 
-## Key Conceptual Pillars Established
+## Decision
 
-### 1. Distinct Engine Superpowers
-- **Claude Code (`claude`)**: Powered by **Claude 3.7 Sonnet** with hybrid reasoning and extended thinking. Excels at precision diff generation, surgical localized refactoring, and interactive dialogue in the VS Code UI.
-- **Antigravity (`agy`)**: Powered by **Gemini 2.5 / 3.0 Pro & Flash**. Features an unprecedented **1M to 2M token context window**, native **Jetski Language Server AST graph / symbol indexing**, multi-modal ingestion (video, audio, mockups), and first-class artifacts.
-- **The Synergy**: Claude handles high-density reasoning without blowing its 200k limit by delegating repo-wide exploration, 500kb+ log digestion, and independent cross-model security audits to Antigravity.
+Revise the documents only. No code will be written. Section 6 of [conceptualisation.md](conceptualisation.md) lists four checks that would test the benefits in practice: a Windows smoke test, a review test, a limit diary and a hand-off trial.
 
-### 2. Model Routing Across the Ecosystem
-- **Main Agents**: Claude 3.7 Sonnet (Claude Code) and Gemini 3.0/2.5 Pro (Antigravity).
-- **Subagents**:
-  - Claude subagents (`.claude/agents/*.md`) can select `haiku` (fast scan), `sonnet` (standard code), `opus` (high-stakes architecture), or `inherit`.
-  - Antigravity subagents (`research`, `self`, etc.) select `flash_lite`, `flash`, `pro`, or `inherit`.
-- **Cross-Tool Synergy**: Invocations via the orchestrator bridge query Gemini Pro/Flash from Claude 3.7 Sonnet, delivering genuine cross-model verification.
+## Changes
 
-### 3. Comparison with Prior Work (`yuting0624/antigravity-for-claude-code`)
-- Solves the critical **Windows compatibility limitation** (eliminates reliance on Unix PTYs by using native stdio JSON-RPC).
-- Evolves from manual slash-commands to **standard Model Context Protocol (MCP)** via `.mcp.json` automatically loaded by VS Code.
-- Adds a **shared blackboard architecture** (`.ag-claude/blackboard.md` + `state.json`) for collaborative task memory.
-- Enables **autonomous heuristic decision-making** so Claude Code decides on its own when to leverage Antigravity.
-
+- [conceptualisation.md](conceptualisation.md) was rewritten as the review.
+- [README.md](README.md) was rewritten to match the review. Its install steps were removed, because the `npx ag-claude init` command never existed.
+- This file replaced the earlier walkthrough.
